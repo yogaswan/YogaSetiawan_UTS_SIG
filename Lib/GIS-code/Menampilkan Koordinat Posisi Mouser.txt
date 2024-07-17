@@ -1,0 +1,45 @@
+//=====================================================================
+// memelukan dukungan file javascrip conversi koordinat  proj4.js dan proj4-src.js
+//code di susun oleh Hidayatul Rahman, M.Kom
+//=====================================================================
+
+// ==== fungsi Stdanar Biasa=====================
+map.on('pointermove', function(event) {
+  var coord3857 = event.coordinate;
+  // koodinat WGS84 di conversi ke koordinat Dispaly
+  var coord4326 = ol.proj.transform(coord3857,'EPSG:3857','EPSG:4326');
+  //Target ID Objek yang menampikan & conversi koordinat ke fromat DMS
+  document.getElementById("KoorInfo").innerHTML = ol.coordinate.toStringHDMS(coord4326);
+});
+
+
+
+
+
+// ==== fungsi Mouse Move dengan Select Feature ========================
+var selected = null;
+map.on('pointermove', function(event) {
+  var coord3857 = event.coordinate;
+  var coord4326 = ol.proj.transform(coord3857,'EPSG:3857','EPSG:4326');
+  //Target ID Objek yang menampikan
+  document.getElementById("KoorInfo").innerHTML = ol.coordinate.toStringHDMS(coord4326);
+  
+    if (selected !== null) {
+    selected.setStyle(undefined);
+    selected = null;
+  }
+
+  map.forEachFeatureAtPixel(event.pixel, function (f) {
+    selected = f;
+	if(f.getGeometry().getType()=="Polygon"){
+		f.setStyle(this.stylesSelect['Polygon']);
+	}
+	if(f.getGeometry().getType()=="LineString"){
+		f.setStyle(this.stylesSelect['Line']);
+	}
+	if(f.getGeometry().getType()=="Point"){
+		f.setStyle(this.stylesSelect['Point']);
+	}	
+    return true;
+  });
+});

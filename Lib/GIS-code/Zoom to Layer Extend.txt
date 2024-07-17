@@ -1,0 +1,9 @@
+//=====================================================================
+// memelukan dukungan ol.js ,  ol.css, proj4.js dan proj4-src.js
+//code di susun oleh Hidayatul Rahman, M.Kom
+//=====================================================================
+
+
+function extToMerc(extent) {
+    return ol.proj.transformExtent(extent, ol.proj.get('EPSG:4326'), ol.proj.get('EPSG:3857'))
+}

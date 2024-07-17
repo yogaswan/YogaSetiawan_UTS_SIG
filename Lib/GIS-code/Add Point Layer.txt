@@ -1,0 +1,32 @@
+//=====================================================================
+// memelukan dukungan Dragdrop.js 
+//code di susun oleh Hidayatul Rahman, M.Kom
+//=====================================================================
+
+
+Poin2= new ol.style.Style({
+	image: new ol.style.Icon({
+	  size: [50, 60],
+	  opacity: 1,
+	  scale: 0.90,
+	  src: 'Simbol/icon/marker17.png'
+	})
+});
+
+function AddPointFitureublik(){
+var px1 = eval(document.getElementById("TxtX").value); // input sumber X
+var py1 = eval(document.getElementById("TxtY").value); // input sumber Y
+var layerPB = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				features: [
+					new ol.Feature({
+						geometry: new ol.geom.Point(ol.proj.fromLonLat([px1,py1]))
+					})
+				]
+			}),
+		style: Poin2,
+		MapType :'Feature',
+		name:  document.getElementById("NmObj").value,
+	});
+	map.addLayer(layerPB);
+}

@@ -1,0 +1,46 @@
+map.on('singleclick', function (evt) {
+var coord4326 = ol.proj.transform(evt.coordinate,'EPSG:3857','EPSG:4326');	
+var view = map.getView();
+var PopUpLySource = LyrInset.getSource();
+content.innerHTML = '<div id="tabelPupOp">Searching..</div>';
+overlay.setPosition(evt.coordinate);
+var data="";
+var url = PopUpLySource.getGetFeatureInfoUrl(evt.coordinate, view.getResolution(), view.getProjection(),{'INFO_FORMAT': 'application/json', 'FEATURE_COUNT':1});
+   if(url){
+	    var urld = encodeURIComponent(url);
+		$.ajax({
+			url: "/spasial/proxy/",
+			data: "url="+urld,
+			cache: false,
+			async: false,
+			success: function(msg){
+				try {
+					data = JSON.parse(decodeURIComponent(msg));
+					console.log(data);
+				} catch (error) {
+					//
+				};
+				if(layerSlec){
+					 map.removeLayer(layerSlec);
+				   };
+			   var vectorSource = new ol.source.Vector({
+				  features: new ol.format.GeoJSON().readFeatures(data),
+				});	
+			   layerSlec = new ol.layer.Vector({
+					  source: vectorSource,
+					  style: styleFunction,											
+				});
+				map.addLayer(layerSlec);																	
+			   var hmlhpopup="";								   
+			   infos = data['features'][0]['properties'];
+				for (var key in infos) {
+					var value = infos[key];
+					content_html = "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
+					hmlhpopup = hmlhpopup + content_html;										
+				};
+				$("#tabelPupOp").html("<table class='table table-ligh table-sm'><tbody>"+hmlhpopup+ "</tbody></table>")
+				}
+		});	
+	}
+});
+};

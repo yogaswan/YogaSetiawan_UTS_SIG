@@ -1,0 +1,57 @@
+//=====================================================================
+// memelukan dukungan ol.js & ol.css
+//code di susun oleh Hidayatul Rahman, M.Kom
+//=====================================================================
+
+var Group =  ol.layer.LayerGroup;
+var marking = false;
+var coordinates;
+var layerP;
+var BasmemapLayer;
+var map;
+
+var attribution = new ol.control.Attribution({
+	collapsible: true
+});
+					
+var overlay = new ol.Overlay({
+  element: container,
+  autoPan: true,
+  autoPanAnimation: {
+	duration: 250,
+  },
+});
+
+map = new ol.Map({
+	controls: ol.control.defaults({attribution: true}).extend([attribution,overviewMapControl]),
+	overlays: [overlay],
+	layers: [BasmemapLayer,
+		new  ol.layer.Tile({
+			source: new ol.source.TileArcGISRest({
+				url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
+			}),
+		name: 'World Label',
+		LegenUrl:'',
+		LegentType :'ESRI',
+		InfoPopup : false,
+		metadata : 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/info/iteminfo',
+		visible: true
+	 }),
+	 new  ol.layer.Tile({
+			source: new ol.source.TileArcGISRest({
+				url: 'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Transportation/MapServer',
+				}),
+			name: 'Trasportation',
+			LegenUrl: '',
+			LegentType :'ESRI',
+			InfoPopup : false,
+			metadata : 'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Transportation/MapServer/info/iteminfo',
+			visible: true
+	 })
+	 ],
+	target: 'map',
+	view: new ol.View({
+		center: ol.proj.fromLonLat([115.32424, -2.2323177]),
+		zoom:6
+	})
+}); 
